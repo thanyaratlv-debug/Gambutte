@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <title>Taiyakii (たいやき) — แอปเรียนคำศัพท์ญี่ปุ่น</title>
+  <meta name="description" content="แอปเรียนคำศัพท์ภาษาญี่ปุ่น Taiyakii สไตล์อบอุ่น ใช้งานออฟไลน์ได้พร้อมระบบ SRS">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Zen Maru Gothic สำหรับฟอนต์ภาษาญี่ปุ่นทรงกลมน่ารัก & Prompt สำหรับภาษาไทย -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ===================== SPLASH SCREEN (หน้าต้อนรับรูปที่ 1) ===================== -->
+  <div id="splash-screen" class="splash-screen">
+    <div class="splash-content">
+      <div class="curved-text">良い一日をお過ごしください</div>
+      
+      <!-- โครงสร้างภาพตัวละคร Torii + ไก่ไทยากิ + กระรอก + จิ้งจอก -->
+      <div class="splash-illustration">
+        <div class="torii-gate">⛩️</div>
+        <div class="character-group">
+          <span class="char squirrel">🐿️</span>
+          <span class="char chick-taiyaki">🐥🥐</span>
+          <span class="char fox">🦊</span>
+        </div>
+      </div>
+
+      <div class="app-logo">
+        <span class="logo-jp">たいやき</span>
+        <span class="logo-en">Taiyakii</span>
+      </div>
+
+      <button class="start-app-btn" id="enterAppBtn">แตะเพื่อเข้าสู่บทเรียน</button>
+    </div>
+  </div>
+
+  <!-- ===================== TOP BAR (แถบด้านบน) ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="cloud-deco left-cloud"></div>
+      <div class="brand-title">
+        <span class="logo-jp-sm">たいやき</span>
+        <span class="logo-en-sm">Taiyakii</span>
+      </div>
+    </div>
+    <button class="menu-btn" id="openFilter" aria-label="เมนูตัวกรอง">
+      <span class="menu-line"></span>
+      <span class="menu-line"></span>
+      <span class="menu-line"></span>
+    </button>
+  </header>
+
+  <!-- ===================== VIEW 1: เรียน (การ์ดคำศัพท์รูปที่ 2, 3) ===================== -->
+  <main class="view active" id="view-learn">
+    <!-- ลวดลายพื้นหลังสไตล์ญี่ปุ่นด้านข้าง -->
+    <div class="bg-deco bg-deco-left"></div>
+    <div class="bg-deco bg-deco-right"></div>
+
+    <div class="stage">
+      <div class="card-scene">
+        <div class="card-swipe-wrap" id="cardSwipeWrap">
+          <div class="card" id="card">
+
+            <!-- หน้าการ์ด (Card Front) -->
+            <div class="card-face card-front">
+              <div class="level-badge">
+                <span class="levelPillText">ระดับคำศัพท์</span>
+              </div>
+
+              <button class="audio-btn audioBtn" aria-label="ฟังเสียงอ่าน">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2.5-1.23L6.5 6H2v12h4.5l5 4V2zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                </svg>
+              </button>
+
+              <div class="word-wrap" id="wordWrapFront">
+                <div class="word">たい焼き</div>
+              </div>
+              <div class="romaji" id="romajiFront">คำอ่าน Romaji</div>
+
+              <button class="flip-hint-btn" id="flipHintBtn">แตะการ์ดเพื่อดูคำแปล</button>
+
+              <!-- ตราประทับดารุมะ (Daruma Stamp) -->
+              <div class="daruma-stamp">
+                <span class="stamp-icon">🏮</span>
+                <span class="stamp-text">明けまして<br>おめでとう</span>
+              </div>
+            </div>
+
+            <!-- หลังการ์ด (Card Back) -->
+            <div class="card-face card-back">
+              <div class="level-badge">
+                <span class="levelPillText">คำแปล & ตัวอย่าง</span>
+              </div>
+
+              <div class="meaning-big" id="meaningBack">ขนมไทยากิ (ขนมรูปปลา)</div>
+              <div class="category-tag" id="categoryBack">หมวดหมู่: อาหาร / ขนม</div>
+
+              <div class="example-block">
+                <div class="example-row">
+                  <p class="example-jp" id="exampleJpBack">たい焼きを食べます。</p>
+                  <button class="audio-btn small audioBtn" id="audioBtnExample">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM6.5 6H2v12h4.5l5 4V2L6.5 6z"/></svg>
+                  </button>
+                </div>
+                <p class="example-th" id="exampleThBack">ทานขนมไทยากิ</p>
+              </div>
+
+              <div class="rate-row">
+                <button class="rate-btn rate-again" data-rating="0">ไม่รู้<span>Again</span></button>
+                <button class="rate-btn rate-hard" data-rating="1">ยาก<span>Hard</span></button>
+                <button class="rate-btn rate-good" data-rating="2">จำได้<span>Good</span></button>
+                <button class="rate-btn rate-easy" data-rating="3">ง่าย<span>Easy</span></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- แถบแนะนำการปัดซ้าย-ขวา -->
+      <div class="swipe-hints">
+        <span class="pill-hint">ปัดซ้ายไปคำถัดไป</span>
+        <span class="pill-hint">ปัดขวาย้อนกลับ</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== VIEW 2: บันทึก (คำศัพท์ที่บันทึกไว้) ===================== -->
+  <main class="view" id="view-saved">
+    <div class="section-banner">
+      <h1>คำศัพท์ที่บันทึกไว้</h1>
+    </div>
+    <div class="pills saved-tabs">
+      <button class="pill saved-tab active" data-saved-tab="fav">🌸 รายการโปรด</button>
+      <button class="pill saved-tab" data-saved-tab="mark">🔖 ทบทวนใหม่</button>
+    </div>
+    <div class="list-wrap" id="savedList"></div>
+  </main>
+
+  <!-- ===================== VIEW 3: สถิติ (รูปที่ 4) ===================== -->
+  <main class="view" id="view-stats">
+    <div class="stats-header-banner">
+      <h1>สถิติการเรียน</h1>
+    </div>
+
+    <!-- กล่องสถิติ 4 ช่อง พร้อมแมวตกแต่ง -->
+    <div class="stat-boxes-container">
+      <div class="stat-box">
+        <span class="stat-title">สัปดาห์นี้</span>
+        <div class="stat-value-group">
+          <span class="stat-number" id="statWeek">0</span>
+          <span class="stat-unit">ครั้ง</span>
+        </div>
+        <!-- แมวดำปีนขอบ -->
+        <div class="cat-deco cat-top-right">🐾🐱</div>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-title">เดือนนี้</span>
+        <div class="stat-value-group">
+          <span class="stat-number" id="statMonth">0</span>
+          <span class="stat-unit">ครั้ง</span>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-title">ปีนี้</span>
+        <div class="stat-value-group">
+          <span class="stat-number" id="statYear">0</span>
+          <span class="stat-unit">ครั้ง</span>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-title">เรียนรู้ต่อเนื่อง</span>
+        <div class="stat-value-group">
+          <span class="stat-number" id="statStreak">0</span>
+          <span class="stat-unit">วันต่อสัปดาห์</span>
+        </div>
+        <!-- แมวดำนอนขอบล่าง -->
+        <div class="cat-deco cat-bottom-right">🐈‍⬛</div>
+      </div>
+    </div>
+
+    <!-- กราฟแท่ง 7 วันล่าสุด -->
+    <div class="chart-container">
+      <h2 class="chart-title">คำที่สะสมภายใน 7 วันล่าสุด</h2>
+      <div class="chart-bars-wrap" id="dailyChart">
+        <div class="chart-day-col">
+          <div class="bar bar-sun" style="height: 45%;"></div>
+          <span class="day-en">Sunday</span>
+          <span class="day-jp">にちようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-mon" style="height: 10%;"></div>
+          <span class="day-en">Monday</span>
+          <span class="day-jp">げつようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-tue" style="height: 8%;"></div>
+          <span class="day-en">Tuesday</span>
+          <span class="day-jp">かようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-wed" style="height: 30%;"></div>
+          <span class="day-en">Wednesday</span>
+          <span class="day-jp">すいようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-thu" style="height: 40%;"></div>
+          <span class="day-en">Thursday</span>
+          <span class="day-jp">もくようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-fri" style="height: 55%;"></div>
+          <span class="day-en">Friday</span>
+          <span class="day-jp">きんようび</span>
+        </div>
+        <div class="chart-day-col">
+          <div class="bar bar-sat" style="height: 90%;"></div>
+          <span class="day-en">Saturday</span>
+          <span class="day-jp">どようび</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== VIEW 4: ตั้งค่า (รูปที่ 5) ===================== -->
+  <main class="view" id="view-settings">
+    <div class="settings-top">
+      <h1 class="settings-title">ตั้งค่า</h1>
+      <div class="brand-badge-mini">
+        <span>たいやき</span>
+        <small>Taiyakii</small>
+      </div>
+    </div>
+
+    <!-- รูปแบบตัวอักษร -->
+    <div class="setting-row">
+      <label class="setting-label">รูปแบบตัวอักษร</label>
+      <div class="mode-pills" id="modePills">
+        <button class="mode-pill active">Kanji</button>
+        <button class="mode-pill">Hiragana</button>
+        <button class="mode-pill">Katakana</button>
+      </div>
+    </div>
+
+    <!-- ความเร็วเสียงอ่าน -->
+    <div class="setting-row">
+      <label class="setting-label">ความเร็วเสียงอ่าน</label>
+      <div class="tts-control">
+        <span class="tts-icon">🔊</span>
+        <input type="range" id="ttsRate" min="0.5" max="1.3" step="0.05" value="0.85">
+      </div>
+      <button class="btn-listen-test" id="ttsTestBtn">ลองฟังเสียง</button>
+    </div>
+
+    <!-- การแจ้งเตือน -->
+    <div class="setting-row">
+      <div class="notify-toggle-line">
+        <label class="setting-label">การแจ้งเตือนคำศัพท์ใหม่</label>
+        <label class="switch">
+          <input type="checkbox" id="notifyToggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div class="notify-freq-section">
+        <span class="sub-label">เวลาในการแจ้งเตือนคำศัพท์ประจำวัน</span>
+        <div class="freq-pills" id="notifyFreqPills">
+          <button class="freq-pill active">ทุกวันเวลานี้</button>
+          <button class="freq-pill">ทุก 3 ชม.</button>
+          <button class="freq-pill">ทุก 5 ชม.</button>
+          <button class="freq-pill">ทุก 12 ชม.</button>
+        </div>
+      </div>
+
+      <p class="notify-note">
+        หมายเหตุ: หากปิดแอปสนิท เบราว์เซอร์บางตัว (เช่น iOS Safari) อาจไม่ส่งการแจ้งเตือนจนกว่าจะเปิดโต๊ะอีกครั้ง เนื่องจากข้อจำกัดของระบบไม่ใช่แอปนี้
+      </p>
+    </div>
+
+    <!-- ข้อมูลคลังคำศัพท์ & ปุ่มรีเซ็ต -->
+    <div class="setting-row">
+      <div class="vocab-count-line">
+        <span class="setting-label">ข้อมูล</span>
+        <span class="count-text" id="wordCountLabel">133 คำในคลังคำศัพท์</span>
+      </div>
+      <button class="btn-reset-srs" id="resetProgressBtn">ล้างความคืบหน้า SRS ทั้งหมด</button>
+    </div>
+
+    <!-- การ์ดเพิ่มลงหน้าจอหลัก (PWA Banner สไตล์ญี่ปุ่น) -->
+    <div class="install-card-wrapper" id="installRow">
+      <p class="install-tip">เพิ่มแอปนี้ไว้ที่หน้าจอหลัก! เพื่อใช้งานแบบออฟไลน์และการแจ้งเตือน</p>
+      <div class="install-banner-box" id="installBtn">
+        <div class="banner-pattern left-pattern"></div>
+        <div class="banner-text">เพิ่มไว้ที่หน้าจอหลัก</div>
+        <div class="banner-avatar">
+          <span class="avatar-icon">🐥🥐</span>
+        </div>
+        <div class="banner-pattern right-pattern"></div>
+      </div>
+    </div>
+
+    <!-- ภาพวาดสวนดอกไฮเดรนเยียและจิ้งจอกด้านล่างหน้าจอ -->
+    <div class="hydrangea-footer-deco">
+      <div class="deco-fox">🦊</div>
+      <div class="deco-flowers">🌸🪻🌼🌺🌸</div>
+    </div>
+  </main>
+
+  <!-- ===================== BOTTOM NAVIGATION BAR ===================== -->
+  <nav class="tabbar">
+    <button class="tab-btn active" data-view="learn">
+      <div class="tab-icon-wrapper scroll-icon">📜</div>
+      <span>เรียน</span>
+    </button>
+    <button class="tab-btn" data-view="saved">
+      <div class="tab-icon-wrapper memo-icon">🎴</div>
+      <span>บันทึก</span>
+    </button>
+    <button class="tab-btn" data-view="stats">
+      <div class="tab-icon-wrapper koinobori-icon">🎏</div>
+      <span>สถิติ</span>
+    </button>
+    <button class="tab-btn" data-view="settings">
+      <div class="tab-icon-wrapper plum-icon">🌸</div>
+      <span>ตั้งค่า</span>
+    </button>
+  </nav>
+
+  <!-- Filter Sheet / Toast -->
+  <div class="overlay" id="filterOverlay">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <h2>ตัวกรองระดับคำศัพท์</h2>
+      <div class="pills" id="filterLevelPills"></div>
+      <div class="pills" id="filterCategoryPills" style="margin-top:12px;"></div>
+      <button class="close-sheet" id="closeFilter">เสร็จสิ้น</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/db.js"></script>
+  <script src="js/srs.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/gestures.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // จัดการเปิด-ปิดหน้า Splash Screen
+    document.getElementById('enterAppBtn')?.addEventListener('click', () => {
+      document.getElementById('splash-screen').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+      }, 400);
+    });
+  </script>
+</body>
+</html>
